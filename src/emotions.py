@@ -2,6 +2,7 @@ import numpy as np
 import argparse
 import cv2
 import matplot as plt
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv2D
@@ -40,6 +41,12 @@ def plot_model_history(model_history):
     axs[1].legend(['train', 'val'], loc='best')
     fig.savefig('plot.png')
     plt.show()
+
+
+def model_summary():
+    model_vars = tf.trainable_variables()
+    slim.model_analyzer.analyze_vars(model_vars, print_info=True)
+
 
 # Define data generators
 train_dir = 'data/train'
@@ -97,6 +104,7 @@ if mode == "train":
             validation_steps=num_val // batch_size)
 
     model.save_weights('model.h5')
+    model_summary()
     plot_model_history(model_info)
 
 
